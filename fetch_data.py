@@ -1,17 +1,8 @@
-from kafka import KafkaConsumer
-from json import loads
+from from_kafka_pipeline.extractor import KafkaMessageExtractor
+from from_kafka_pipeline.loader import GKMessageLoader
+from from_kafka_pipeline.transformer import GKMessageTransformer
 
-consumer = KafkaConsumer(
-    'chat_messages',
-    bootstrap_servers=['localhost:9092'],
-    auto_offset_reset='earliest',
-    enable_auto_commit=True,
-    group_id='greenkey',
-    value_deserializer=lambda x: loads(x.decode('utf-8'))
-)
-
-for event in consumer:
-    event_data = event.value
-    # Do whatever you want
-    print(event_data)
-
+if __name__ == '__main__':
+    chat_messages = KafkaMessageExtractor().extract()
+    transformed_chat_messages = GKMessageTransformer().transform(chat_messages)
+    GKMessageLoader().load(transformed_chat_messages)
