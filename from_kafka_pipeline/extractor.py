@@ -23,16 +23,19 @@ class KafkaMessageExtractor:
                 msg = consumer.poll(timeout=1.0)
 
                 if msg is None:
-                    continue
+                    break
 
                 if msg.error():
                     if self.is_partition_end(msg):
                         sys.stderr.write(f'{msg.topic()} {msg.partition()} {msg.offset()} reached end at offset %d\n')
+                        break
+
                     elif msg.error():
                         raise KafkaException(msg.error())
                 else:
                     messages.append(msg)
         finally:
+            print(f'Found {len(messages)} messages.')
             consumer.close()
 
         return messages
