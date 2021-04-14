@@ -1,6 +1,6 @@
 import sys
 
-from confluent_kafka.cimpl import Consumer, KafkaError, KafkaException
+from confluent_kafka.cimpl import Consumer, KafkaError, KafkaException, Message
 
 from settings import BOOTSTRAP_SERVER, TOPIC_NAME
 
@@ -38,5 +38,5 @@ class KafkaMessageExtractor:
         return messages
 
     @staticmethod
-    def is_partition_end(msg):
+    def is_partition_end(msg: Message) -> bool:
         return msg.error().code() == KafkaError._PARTITION_EOF

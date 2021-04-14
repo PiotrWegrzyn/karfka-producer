@@ -7,5 +7,5 @@ class GKMessageLoader:
     def __init__(self):
         self.source_connector = GKConnector()
 
-    def load(self, messages: Iterable(dict)):
+    def load(self, messages: Iterable[dict]):
         self.source_connector.send(messages)
